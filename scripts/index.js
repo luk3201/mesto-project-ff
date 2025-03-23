@@ -2,19 +2,19 @@
 const cardTemplate = document.querySelector('#card-template').content;
 
 // @todo: DOM узлы
-const cardlist = document.querySelector('.places__list');
+const cardList = document.querySelector('.places__list');
 
 // @todo: Функция создания карточки
-function addCard(cardname, cardimg) {
-    if (cardname[0] !== cardname[0].toUpperCase()) {
-        cardname = cardname[0].toUpperCase() + cardname.slice(1);
+function addCard(cardName, cardImg) {
+    if (cardName[0] !== cardName[0].toUpperCase()) {
+        cardName = cardName[0].toUpperCase() + cardName.slice(1);
     }
-    const newcard = cardTemplate.querySelector('.card').cloneNode(true);
-    newcard.querySelector('.card__image').src = cardimg;
-    newcard.querySelector('.card__image').alt = 'Изображение ' + cardname;
-    newcard.querySelector('.card__description').querySelector('.card__title').textContent = cardname; 
-    newcard.querySelector('.card__delete-button').addEventListener('click', delCard);
-    return newcard;
+    const newCard = cardTemplate.querySelector('.card').cloneNode(true);
+    newCard.querySelector('.card__image').src = cardImg;
+    newCard.querySelector('.card__image').alt = 'Изображение ' + cardName;
+    newCard.querySelector('.card__description').querySelector('.card__title').textContent = cardName; 
+    newCard.querySelector('.card__delete-button').addEventListener('click', delCard);
+    return newCard;
 };
 
 // @todo: Функция удаления карточки
@@ -27,5 +27,5 @@ function delCard(evt) {
 initialCards.forEach((cardData) => {
     const cardElement = addCard(cardData.name, cardData.link);
     console.log(cardElement);
-    cardlist.append(cardElement);
+    cardList.append(cardElement);
 });
