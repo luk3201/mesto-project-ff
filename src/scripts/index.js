@@ -119,6 +119,7 @@ function submitAddCard(evt) {
             cardList.prepend(createCard(cardTemplate, userID, {name: card.name, link: card.link, _id: card._id, owner: card.owner, likes: card.likes}, toggleLike, openImagePopup));
             closeModal(elements.addCardPopup);
         })
+        .catch((res) => {console.error(`Ошибка ${res} при загрузке данных`)})
         .finally(() => {elements.button.textContent = 'Сохранить'});
 }
 ///////
