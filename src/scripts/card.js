@@ -30,9 +30,11 @@ function createCard(template, userID, {name, link, _id, owner, likes}, likefun, 
   
 // @todo: Функция удаления карточки
 function delCard(evt,_id) {
-    const del = evt.target.closest('.places__item');
     delCardData(_id)
-        .then(() => {del.remove();})
+        .then(() => {
+            const del = evt.target.closest('.places__item');
+            del.remove();
+        })
         .catch((res) => {console.error(`Ошибка ${res} при удалении`)});
 };
 
@@ -46,12 +48,14 @@ function toggleLike(evt, _id) {
                 evt.target.classList.toggle('card__like-button_is-active');
                 count.textContent = likes.length;
             })
+            .catch((res) => {console.error(`Ошибка ${res} удалении лайка`)});
     } else {
         putLikeData(_id)
             .then((likes) => {
                 evt.target.classList.toggle('card__like-button_is-active');
                 count.textContent = likes.length;
-    });
+            })
+            .catch((res) => {console.error(`Ошибка ${res} при постановке лайка`)});
 };
 };
   

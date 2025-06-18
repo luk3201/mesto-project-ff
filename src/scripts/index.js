@@ -21,8 +21,9 @@ Promise.all([getUserData(),getCardsData()])
         }
         cards.forEach(({name, link, _id, owner, likes}) => {
             cardList.append(createCard(cardTemplate, userID, {name, link, _id, owner, likes}, toggleLike, openImagePopup));
-        }); 
-    });
+        });
+    })
+    .catch((res) => {console.error(`Ошибка ${res} при загрузке данных`)});
 
 const elements = {
     editAvatarPopup: document.querySelector('.popup_type_avatar'),
@@ -45,6 +46,7 @@ const elements = {
     imagePopup: document.querySelector('.popup_type_image'),
     imagePopupImage: document.querySelector('.popup__image'),
     imagePopupCaption: document.querySelector('.popup__caption'),
+    button: document.querySelector('.button'),
 };
 
 elements.addCardButton.addEventListener('click', () => { openAddPopup() });
@@ -88,28 +90,36 @@ function submitEditAvatar(evt) {
     evt.preventDefault();
     evt.target.querySelector('.button').textContent = 'Сохранение...'
     editUserAvatar(elements.avatarFormInput.value)
-        .then((url) => {elements.profileAvatar.style.backgroundImage = `url(${url})`})
-        .finally(() => {evt.target.querySelector('.button').textContent = 'Сохранить'});
-    closeModal(elements.editAvatarPopup);
+        .then((url) => {
+            elements.profileAvatar.style.backgroundImage = `url(${url})`;
+            closeModal(elements.editAvatarPopup);
+        })
+        .catch((res) => {console.error(`Ошибка ${res} при обновлении аватара`)})
+        .finally(() => {elements.button.textContent = 'Сохранить'});
 }
 
 function submitEditProfille(evt) {
     evt.preventDefault();
     evt.target.querySelector('.button').textContent = 'Сохранение...'
     editUserData(elements.editProfileNameInput.value, elements.editProfileDescriptionInput.value)
-        .finally(() => {evt.target.querySelector('.button').textContent = 'Сохранить'});
-    elements.name.textContent = elements.editProfileNameInput.value; 
-    elements.description.textContent = elements.editProfileDescriptionInput.value;
-    closeModal(elements.editProfilePopup);
+        .then(() => {
+            elements.name.textContent = elements.editProfileNameInput.value; 
+            elements.description.textContent = elements.editProfileDescriptionInput.value;
+            closeModal(elements.editProfilePopup);
+        })
+        .catch((res) => {console.error(`Ошибка ${res} при загрузке данных`)})
+        .finally(() => {elements.button.textContent = 'Сохранить'});
 }
 ///////
 function submitAddCard(evt) {
     evt.preventDefault();
-    evt.target.querySelector('.button').textContent = 'Сохранение...'
+    elements.button.textContent = 'Сохранение...'
     addCardData(elements.addCardNameInput.value,elements.addCardLinkInput.value)
-        .then((card) => {cardList.prepend(createCard(cardTemplate, userID, {name: card.name, link: card.link, _id: card._id, owner: card.owner, likes: card.likes}, toggleLike, openImagePopup))})
-        .finally(() => {evt.target.querySelector('.button').textContent = 'Сохранить'});
-    closeModal(elements.addCardPopup);
+        .then((card) => {
+            cardList.prepend(createCard(cardTemplate, userID, {name: card.name, link: card.link, _id: card._id, owner: card.owner, likes: card.likes}, toggleLike, openImagePopup));
+            closeModal(elements.addCardPopup);
+        })
+        .finally(() => {elements.button.textContent = 'Сохранить'});
 }
 ///////
 export { cardTemplate };
